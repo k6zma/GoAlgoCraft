@@ -21,6 +21,19 @@ type testBuilding struct {
 	expectedBuildFlag bool
 }
 
+type testPushing struct {
+	testName       string
+	pushingElement interface{}
+	originalData   interface{}
+	expectedData   interface{}
+}
+
+type testPopping struct {
+	testName string
+	data     interface{}
+	expected interface{}
+}
+
 // lessSlice compares two slices and returns true if the first is "less" than the second.
 //
 // It compares the slices' lengths first; if they differ, it returns true if the first slice is shorter.
@@ -969,6 +982,858 @@ func TestMinHeapBuild(t *testing.T) {
 				h := heap.NewMinHeap(v, less, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
+			}
+		})
+	}
+}
+
+func TestMaxHeapPushing(t *testing.T) {
+	tests := []testPushing{
+		{
+			testName:       "Test with 15 int elements for max-heap with pushing 54",
+			pushingElement: 54,
+			originalData:   []int{98, 62, 80, 44, 56, 76, 17, 23, 22, 55, 16, 46, 2, 16, 11},
+			expectedData:   []int{98, 62, 80, 54, 56, 76, 17, 44, 22, 55, 16, 46, 2, 16, 11, 23},
+		},
+		{
+			testName:       "Test with 15 int32 elements for max-heap with pushing 54",
+			pushingElement: int32(54),
+			originalData:   []int32{98, 62, 80, 44, 56, 76, 17, 23, 22, 55, 16, 46, 2, 16, 11},
+			expectedData:   []int32{98, 62, 80, 54, 56, 76, 17, 44, 22, 55, 16, 46, 2, 16, 11, 23},
+		},
+		{
+			testName:       "Test with 15 int64 elements for max-heap with pushing 54",
+			pushingElement: int64(54),
+			originalData:   []int64{98, 62, 80, 44, 56, 76, 17, 23, 22, 55, 16, 46, 2, 16, 11},
+			expectedData:   []int64{98, 62, 80, 54, 56, 76, 17, 44, 22, 55, 16, 46, 2, 16, 11, 23},
+		},
+		{
+			testName:       "Test with 15 float32 elements for max-heap with pushing 54.5",
+			pushingElement: float32(54.5),
+			originalData:   []float32{98.0, 62.0, 80.0, 44.0, 56.0, 76.0, 17.0, 23.0, 22.0, 55.0, 16.0, 46.0, 2.0, 16.0, 11.0},
+			expectedData:   []float32{98.0, 62.0, 80.0, 54.5, 56.0, 76.0, 17.0, 44.0, 22.0, 55.0, 16.0, 46.0, 2.0, 16.0, 11.0, 23.0},
+		},
+		{
+			testName:       "Test with 15 float64 elements for max-heap with pushing 54.5",
+			pushingElement: float64(54.5),
+			originalData:   []float64{98.0, 62.0, 80.0, 44.0, 56.0, 76.0, 17.0, 23.0, 22.0, 55.0, 16.0, 46.0, 2.0, 16.0, 11.0},
+			expectedData:   []float64{98.0, 62.0, 80.0, 54.5, 56.0, 76.0, 17.0, 44.0, 22.0, 55.0, 16.0, 46.0, 2.0, 16.0, 11.0, 23.0},
+		},
+		{
+			testName:       "Test with 5 string elements for max-heap with pushing 'pear'",
+			pushingElement: "pear",
+			originalData:   []string{"apple", "banana", "cherry", "date", "elderberry"},
+			expectedData:   []string{"pear", "date", "elderberry", "apple", "banana", "cherry"},
+		},
+		{
+			testName:       "Test with 3 elements of type []int for max-heap with pushing [1, 2, 3]",
+			pushingElement: []int{1, 2, 3},
+			originalData: [][]int{
+				{4, 5, 6},
+				{7, 8, 9},
+				{10, 11, 12},
+			},
+			expectedData: [][]int{
+				{10, 11, 12},
+				{7, 8, 9},
+				{4, 5, 6},
+				{1, 2, 3},
+			},
+		},
+		{
+			testName:       "Test with 3 elements of type []int32 for max-heap with pushing [1, 2, 3]",
+			pushingElement: []int32{1, 2, 3},
+			originalData: [][]int32{
+				{4, 5, 6},
+				{7, 8, 9},
+				{10, 11, 12},
+			},
+			expectedData: [][]int32{
+				{10, 11, 12},
+				{7, 8, 9},
+				{4, 5, 6},
+				{1, 2, 3},
+			},
+		},
+		{
+			testName:       "Test with 3 elements of type []int64 for max-heap with pushing [1, 2, 3]",
+			pushingElement: []int64{1, 2, 3},
+			originalData: [][]int64{
+				{4, 5, 6},
+				{7, 8, 9},
+				{10, 11, 12},
+			},
+			expectedData: [][]int64{
+				{10, 11, 12},
+				{7, 8, 9},
+				{4, 5, 6},
+				{1, 2, 3},
+			},
+		},
+		{
+			testName:       "Test with 3 elements of type []float32 for max-heap with pushing [1.1, 2.2, 3.3]",
+			pushingElement: []float32{1.1, 2.2, 3.3},
+			originalData: [][]float32{
+				{4.4, 5.5, 6.6},
+				{7.7, 8.8, 9.9},
+				{10.10, 11.11, 12.12},
+			},
+			expectedData: [][]float32{
+				{10.10, 11.11, 12.12},
+				{7.7, 8.8, 9.9},
+				{4.4, 5.5, 6.6},
+				{1.1, 2.2, 3.3},
+			},
+		},
+		{
+			testName:       "Test with 3 elements of type []float64 for max-heap with pushing [1.1, 2.2, 3.3]",
+			pushingElement: []float64{1.1, 2.2, 3.3},
+			originalData: [][]float64{
+				{4.4, 5.5, 6.6},
+				{7.7, 8.8, 9.9},
+				{10.10, 11.11, 12.12},
+			},
+			expectedData: [][]float64{
+				{10.10, 11.11, 12.12},
+				{7.7, 8.8, 9.9},
+				{4.4, 5.5, 6.6},
+				{1.1, 2.2, 3.3},
+			},
+		},
+		{
+			testName:       "Test with 3 elements of type []string for max-heap with pushing [\"grape\", \"honeydew\"]",
+			pushingElement: []string{"grape", "honeydew"},
+			originalData: [][]string{
+				{"apple", "banana", "cherry"},
+				{"date", "elderberry", "fig"},
+				{"kiwi", "lemon", "mango"},
+			},
+			expectedData: [][]string{
+				{"kiwi", "lemon", "mango"},
+				{"date", "elderberry", "fig"},
+				{"apple", "banana", "cherry"},
+				{"grape", "honeydew"},
+			},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.testName, func(t *testing.T) {
+			switch v := test.originalData.(type) {
+			case []int:
+				less := func(a, b int) bool { return a < b }
+				equals := func(a, b int) bool { return a == b }
+				h := heap.NewMaxHeap(v, less, equals)
+				h.Push(test.pushingElement.(int))
+				assert.Equal(t, test.expectedData, h.Data)
+			case []int32:
+				less := func(a, b int32) bool { return a < b }
+				equals := func(a, b int32) bool { return a == b }
+				h := heap.NewMaxHeap(v, less, equals)
+				h.Push(test.pushingElement.(int32))
+				assert.Equal(t, test.expectedData, h.Data)
+			case []int64:
+				less := func(a, b int64) bool { return a < b }
+				equals := func(a, b int64) bool { return a == b }
+				h := heap.NewMaxHeap(v, less, equals)
+				h.Push(test.pushingElement.(int64))
+				assert.Equal(t, test.expectedData, h.Data)
+			case []float32:
+				less := func(a, b float32) bool { return a < b }
+				equals := func(a, b float32) bool { return a == b }
+				h := heap.NewMaxHeap(v, less, equals)
+				h.Push(test.pushingElement.(float32))
+				assert.Equal(t, test.expectedData, h.Data)
+			case []float64:
+				less := func(a, b float64) bool { return a < b }
+				equals := func(a, b float64) bool { return a == b }
+				h := heap.NewMaxHeap(v, less, equals)
+				h.Push(test.pushingElement.(float64))
+				assert.Equal(t, test.expectedData, h.Data)
+			case []string:
+				less := func(a, b string) bool { return a < b }
+				equals := func(a, b string) bool { return a == b }
+				h := heap.NewMaxHeap(v, less, equals)
+				h.Push(test.pushingElement.(string))
+				assert.Equal(t, test.expectedData, h.Data)
+			case [][]int:
+				less := func(a, b []int) bool { return lessSlice(a, b) }
+				equals := func(a, b []int) bool { return equalsSlice(a, b) }
+				h := heap.NewMaxHeap(v, less, equals)
+				h.Push(test.pushingElement.([]int))
+				assert.Equal(t, test.expectedData, h.Data)
+			case [][]int32:
+				less := func(a, b []int32) bool { return lessSlice(a, b) }
+				equals := func(a, b []int32) bool { return equalsSlice(a, b) }
+				h := heap.NewMaxHeap(v, less, equals)
+				h.Push(test.pushingElement.([]int32))
+				assert.Equal(t, test.expectedData, h.Data)
+			case [][]int64:
+				less := func(a, b []int64) bool { return lessSlice(a, b) }
+				equals := func(a, b []int64) bool { return equalsSlice(a, b) }
+				h := heap.NewMaxHeap(v, less, equals)
+				h.Push(test.pushingElement.([]int64))
+				assert.Equal(t, test.expectedData, h.Data)
+			case [][]float32:
+				less := func(a, b []float32) bool { return lessSlice(a, b) }
+				equals := func(a, b []float32) bool { return equalsSlice(a, b) }
+				h := heap.NewMaxHeap(v, less, equals)
+				h.Push(test.pushingElement.([]float32))
+				assert.Equal(t, test.expectedData, h.Data)
+			case [][]float64:
+				less := func(a, b []float64) bool { return lessSlice(a, b) }
+				equals := func(a, b []float64) bool { return equalsSlice(a, b) }
+				h := heap.NewMaxHeap(v, less, equals)
+				h.Push(test.pushingElement.([]float64))
+				assert.Equal(t, test.expectedData, h.Data)
+			case [][]string:
+				less := func(a, b []string) bool { return lessSlice(a, b) }
+				equals := func(a, b []string) bool { return equalsSlice(a, b) }
+				h := heap.NewMaxHeap(v, less, equals)
+				h.Push(test.pushingElement.([]string))
+				assert.Equal(t, test.expectedData, h.Data)
+			}
+		})
+	}
+}
+
+func TestMinHeapPushing(t *testing.T) {
+	tests := []testPushing{
+		{
+			testName:       "Test with 15 int32 elements for max-heap with pushing 54",
+			pushingElement: 54,
+			originalData:   []int{98, 62, 80, 44, 56, 76, 17, 23, 22, 55, 16, 46, 2, 16, 11},
+			expectedData:   []int{2, 16, 11, 22, 55, 46, 16, 23, 44, 62, 56, 80, 76, 98, 17, 54},
+		},
+		{
+			testName:       "Test with 15 int32 elements for max-heap with pushing 54",
+			pushingElement: int32(54),
+			originalData:   []int32{98, 62, 80, 44, 56, 76, 17, 23, 22, 55, 16, 46, 2, 16, 11},
+			expectedData:   []int32{2, 16, 11, 22, 55, 46, 16, 23, 44, 62, 56, 80, 76, 98, 17, 54},
+		},
+		{
+			testName:       "Test with 15 int64 elements for max-heap with pushing 54",
+			pushingElement: int64(54),
+			originalData:   []int64{98, 62, 80, 44, 56, 76, 17, 23, 22, 55, 16, 46, 2, 16, 11},
+			expectedData:   []int64{2, 16, 11, 22, 55, 46, 16, 23, 44, 62, 56, 80, 76, 98, 17, 54},
+		},
+		{
+			testName:       "Test with 15 float32 elements for max-heap with pushing 54.5",
+			pushingElement: float32(54.5),
+			originalData:   []float32{98.0, 62.0, 80.0, 44.0, 56.0, 76.0, 17.0, 23.0, 22.0, 55.0, 16.0, 46.0, 2.0, 16.0, 11.0},
+			expectedData:   []float32{2.0, 16.0, 11.0, 22.0, 55.0, 46.0, 16.0, 23.0, 44.0, 62.0, 56.0, 80.0, 76.0, 98.0, 17.0, 54.5},
+		},
+		{
+			testName:       "Test with 15 float64 elements for max-heap with pushing 54.5",
+			pushingElement: float64(54.5),
+			originalData:   []float64{98.0, 62.0, 80.0, 44.0, 56.0, 76.0, 17.0, 23.0, 22.0, 55.0, 16.0, 46.0, 2.0, 16.0, 11.0},
+			expectedData:   []float64{2.0, 16.0, 11.0, 22.0, 55.0, 46.0, 16.0, 23.0, 44.0, 62.0, 56.0, 80.0, 76.0, 98.0, 17.0, 54.5},
+		},
+		{
+			testName:       "Test with 5 string elements for max-heap with pushing 'pear'",
+			pushingElement: "pear",
+			originalData:   []string{"apple", "banana", "cherry", "date", "elderberry"},
+			expectedData:   []string{"apple", "banana", "cherry", "date", "elderberry", "pear"},
+		},
+		{
+			testName:       "Test with 3 elements of type []int for max-heap with pushing [1, 2, 3]",
+			pushingElement: []int{1, 2, 3},
+			originalData: [][]int{
+				{4, 5, 6},
+				{7, 8, 9},
+				{10, 11, 12},
+			},
+			expectedData: [][]int{
+				{1, 2, 3},
+				{4, 5, 6},
+				{10, 11, 12},
+				{7, 8, 9},
+			},
+		},
+		{
+			testName:       "Test with 3 elements of type []int32 for max-heap with pushing [1, 2, 3]",
+			pushingElement: []int32{1, 2, 3},
+			originalData: [][]int32{
+				{4, 5, 6},
+				{7, 8, 9},
+				{10, 11, 12},
+			},
+			expectedData: [][]int32{
+				{1, 2, 3},
+				{4, 5, 6},
+				{10, 11, 12},
+				{7, 8, 9},
+			},
+		},
+		{
+			testName:       "Test with 3 elements of type []int64 for max-heap with pushing [1, 2, 3]",
+			pushingElement: []int64{1, 2, 3},
+			originalData: [][]int64{
+				{4, 5, 6},
+				{7, 8, 9},
+				{10, 11, 12},
+			},
+			expectedData: [][]int64{
+				{1, 2, 3},
+				{4, 5, 6},
+				{10, 11, 12},
+				{7, 8, 9},
+			},
+		},
+		{
+			testName:       "Test with 3 elements of type []float32 for max-heap with pushing [1.1, 2.2, 3.3]",
+			pushingElement: []float32{1.1, 2.2, 3.3},
+			originalData: [][]float32{
+				{4.4, 5.5, 6.6},
+				{7.7, 8.8, 9.9},
+				{10.10, 11.11, 12.12},
+			},
+			expectedData: [][]float32{
+				{1.1, 2.2, 3.3},
+				{4.4, 5.5, 6.6},
+				{10.10, 11.11, 12.12},
+				{7.7, 8.8, 9.9},
+			},
+		},
+		{
+			testName:       "Test with 3 elements of type []float64 for max-heap with pushing [1.1, 2.2, 3.3]",
+			pushingElement: []float64{1.1, 2.2, 3.3},
+			originalData: [][]float64{
+				{4.4, 5.5, 6.6},
+				{7.7, 8.8, 9.9},
+				{10.10, 11.11, 12.12},
+			},
+			expectedData: [][]float64{
+				{1.1, 2.2, 3.3},
+				{4.4, 5.5, 6.6},
+				{10.10, 11.11, 12.12},
+				{7.7, 8.8, 9.9},
+			},
+		},
+		{
+			testName:       "Test with 3 elements of type []string for max-heap with pushing [\"grape\", \"honeydew\"]",
+			pushingElement: []string{"grape", "honeydew"},
+			originalData: [][]string{
+				{"apple", "banana", "cherry"},
+				{"date", "elderberry", "fig"},
+				{"kiwi", "lemon", "mango"},
+			},
+			expectedData: [][]string{
+				{"grape", "honeydew"},
+				{"apple", "banana", "cherry"},
+				{"kiwi", "lemon", "mango"},
+				{"date", "elderberry", "fig"},
+			},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.testName, func(t *testing.T) {
+			switch v := test.originalData.(type) {
+			case []int:
+				less := func(a, b int) bool { return a < b }
+				equals := func(a, b int) bool { return a == b }
+				h := heap.NewMinHeap(v, less, equals)
+				h.Push(test.pushingElement.(int))
+				assert.Equal(t, test.expectedData, h.Data)
+			case []int32:
+				less := func(a, b int32) bool { return a < b }
+				equals := func(a, b int32) bool { return a == b }
+				h := heap.NewMinHeap(v, less, equals)
+				h.Push(test.pushingElement.(int32))
+				assert.Equal(t, test.expectedData, h.Data)
+			case []int64:
+				less := func(a, b int64) bool { return a < b }
+				equals := func(a, b int64) bool { return a == b }
+				h := heap.NewMinHeap(v, less, equals)
+				h.Push(test.pushingElement.(int64))
+				assert.Equal(t, test.expectedData, h.Data)
+			case []float32:
+				less := func(a, b float32) bool { return a < b }
+				equals := func(a, b float32) bool { return a == b }
+				h := heap.NewMinHeap(v, less, equals)
+				h.Push(test.pushingElement.(float32))
+				assert.Equal(t, test.expectedData, h.Data)
+			case []float64:
+				less := func(a, b float64) bool { return a < b }
+				equals := func(a, b float64) bool { return a == b }
+				h := heap.NewMinHeap(v, less, equals)
+				h.Push(test.pushingElement.(float64))
+				assert.Equal(t, test.expectedData, h.Data)
+			case []string:
+				less := func(a, b string) bool { return a < b }
+				equals := func(a, b string) bool { return a == b }
+				h := heap.NewMinHeap(v, less, equals)
+				h.Push(test.pushingElement.(string))
+				assert.Equal(t, test.expectedData, h.Data)
+			case [][]int:
+				less := func(a, b []int) bool { return lessSlice(a, b) }
+				equals := func(a, b []int) bool { return equalsSlice(a, b) }
+				h := heap.NewMinHeap(v, less, equals)
+				h.Push(test.pushingElement.([]int))
+				assert.Equal(t, test.expectedData, h.Data)
+			case [][]int32:
+				less := func(a, b []int32) bool { return lessSlice(a, b) }
+				equals := func(a, b []int32) bool { return equalsSlice(a, b) }
+				h := heap.NewMinHeap(v, less, equals)
+				h.Push(test.pushingElement.([]int32))
+				assert.Equal(t, test.expectedData, h.Data)
+			case [][]int64:
+				less := func(a, b []int64) bool { return lessSlice(a, b) }
+				equals := func(a, b []int64) bool { return equalsSlice(a, b) }
+				h := heap.NewMinHeap(v, less, equals)
+				h.Push(test.pushingElement.([]int64))
+				assert.Equal(t, test.expectedData, h.Data)
+			case [][]float32:
+				less := func(a, b []float32) bool { return lessSlice(a, b) }
+				equals := func(a, b []float32) bool { return equalsSlice(a, b) }
+				h := heap.NewMinHeap(v, less, equals)
+				h.Push(test.pushingElement.([]float32))
+				assert.Equal(t, test.expectedData, h.Data)
+			case [][]float64:
+				less := func(a, b []float64) bool { return lessSlice(a, b) }
+				equals := func(a, b []float64) bool { return equalsSlice(a, b) }
+				h := heap.NewMinHeap(v, less, equals)
+				h.Push(test.pushingElement.([]float64))
+				assert.Equal(t, test.expectedData, h.Data)
+			case [][]string:
+				less := func(a, b []string) bool { return lessSlice(a, b) }
+				equals := func(a, b []string) bool { return equalsSlice(a, b) }
+				h := heap.NewMinHeap(v, less, equals)
+				h.Push(test.pushingElement.([]string))
+				assert.Equal(t, test.expectedData, h.Data)
+			}
+		})
+	}
+}
+
+func TestMaxHeapPopping(t *testing.T) {
+	tests := []testPopping{
+		{
+			testName: "Test with 15 int elements for max-heap with popping",
+			data:     []int{98, 62, 80, 44, 56, 76, 17, 23, 22, 55, 16, 46, 2, 16, 11},
+			expected: 98,
+		},
+		{
+			testName: "Test with 15 int32 elements for max-heap with popping",
+			data:     []int32{98, 62, 80, 44, 56, 76, 17, 23, 22, 55, 16, 46, 2, 16, 11},
+			expected: int32(98),
+		},
+		{
+			testName: "Test with 15 int64 elements for max-heap with popping",
+			data:     []int64{98, 62, 80, 44, 56, 76, 17, 23, 22, 55, 16, 46, 2, 16, 11},
+			expected: int64(98),
+		},
+		{
+			testName: "Test with 15 float32 elements for max-heap with popping",
+			data:     []float32{98.0, 62.0, 80.0, 44.0, 56.0, 76.0, 17.0, 23.0, 22.0, 55.0, 16.0, 46.0, 2.0, 16.0, 11.0},
+			expected: float32(98.0),
+		},
+		{
+			testName: "Test with 15 float64 elements for max-heap with popping",
+			data:     []float64{98.0, 62.0, 80.0, 44.0, 56.0, 76.0, 17.0, 23.0, 22.0, 55.0, 16.0, 46.0, 2.0, 16.0, 11.0},
+			expected: float64(98),
+		},
+		{
+			testName: "Test with 5 string elements for max-heap with popping",
+			data:     []string{"apple", "banana", "cherry", "date", "elderberry"},
+			expected: "elderberry",
+		},
+		{
+			testName: "Test with 3 elements of type []int for max-heap with popping",
+			data: [][]int{
+				{4, 5, 6},
+				{7, 8, 9},
+				{10, 11, 12},
+			},
+			expected: []int{10, 11, 12},
+		},
+		{
+			testName: "Test with 3 elements of type []int32 for max-heap with popping",
+			data: [][]int32{
+				{4, 5, 6},
+				{7, 8, 9},
+				{10, 11, 12},
+			},
+			expected: []int32{10, 11, 12},
+		},
+		{
+			testName: "Test with 3 elements of type []int64 for max-heap with popping",
+			data: [][]int64{
+				{4, 5, 6},
+				{7, 8, 9},
+				{10, 11, 12},
+			},
+			expected: []int64{10, 11, 12},
+		},
+		{
+			testName: "Test with 3 elements of type []float32 for max-heap with popping",
+			data: [][]float32{
+				{4.4, 5.5, 6.6},
+				{7.7, 8.8, 9.9},
+				{10.10, 11.11, 12.12},
+			},
+			expected: []float32{10.10, 11.11, 12.12},
+		},
+		{
+			testName: "Test with 3 elements of type []float64 for max-heap with popping",
+			data: [][]float64{
+				{4.4, 5.5, 6.6},
+				{7.7, 8.8, 9.9},
+				{10.10, 11.11, 12.12},
+			},
+			expected: []float64{10.10, 11.11, 12.12},
+		},
+		{
+			testName: "Test with 3 elements of type []string for max-heap with popping",
+			data: [][]string{
+				{"apple", "banana", "cherry"},
+				{"date", "elderberry", "fig"},
+				{"kiwi", "lemon", "mango"},
+			},
+			expected: []string{"kiwi", "lemon", "mango"},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.testName, func(t *testing.T) {
+			switch v := test.data.(type) {
+			case []int:
+				less := func(a, b int) bool { return a < b }
+				equals := func(a, b int) bool { return a == b }
+				h := heap.NewMaxHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case []int32:
+				less := func(a, b int32) bool { return a < b }
+				equals := func(a, b int32) bool { return a == b }
+				h := heap.NewMaxHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case []int64:
+				less := func(a, b int64) bool { return a < b }
+				equals := func(a, b int64) bool { return a == b }
+				h := heap.NewMaxHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case []float32:
+				less := func(a, b float32) bool { return a < b }
+				equals := func(a, b float32) bool { return a == b }
+				h := heap.NewMaxHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case []float64:
+				less := func(a, b float64) bool { return a < b }
+				equals := func(a, b float64) bool { return a == b }
+				h := heap.NewMaxHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case []string:
+				less := func(a, b string) bool { return a < b }
+				equals := func(a, b string) bool { return a == b }
+				h := heap.NewMaxHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case [][]int:
+				less := func(a, b []int) bool { return lessSlice(a, b) }
+				equals := func(a, b []int) bool { return equalsSlice(a, b) }
+				h := heap.NewMaxHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case [][]int32:
+				less := func(a, b []int32) bool { return lessSlice(a, b) }
+				equals := func(a, b []int32) bool { return equalsSlice(a, b) }
+				h := heap.NewMaxHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case [][]int64:
+				less := func(a, b []int64) bool { return lessSlice(a, b) }
+				equals := func(a, b []int64) bool { return equalsSlice(a, b) }
+				h := heap.NewMaxHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case [][]float32:
+				less := func(a, b []float32) bool { return lessSlice(a, b) }
+				equals := func(a, b []float32) bool { return equalsSlice(a, b) }
+				h := heap.NewMaxHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case [][]float64:
+				less := func(a, b []float64) bool { return lessSlice(a, b) }
+				equals := func(a, b []float64) bool { return equalsSlice(a, b) }
+				h := heap.NewMaxHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case [][]string:
+				less := func(a, b []string) bool { return lessSlice(a, b) }
+				equals := func(a, b []string) bool { return equalsSlice(a, b) }
+				h := heap.NewMaxHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			}
+		})
+	}
+}
+
+func TestMinHeapPopping(t *testing.T) {
+	tests := []testPopping{
+		{
+			testName: "Test with 15 int elements for min-heap with popping",
+			data:     []int{98, 62, 80, 44, 56, 76, 17, 23, 22, 55, 16, 46, 2, 16, 11},
+			expected: 2,
+		},
+		{
+			testName: "Test with 15 int32 elements for min-heap with with popping",
+			data:     []int32{98, 62, 80, 44, 56, 76, 17, 23, 22, 55, 16, 46, 2, 16, 11},
+			expected: int32(2),
+		},
+		{
+			testName: "Test with 15 int64 elements for min-heap with with popping",
+			data:     []int64{98, 62, 80, 44, 56, 76, 17, 23, 22, 55, 16, 46, 2, 16, 11},
+			expected: int64(2),
+		},
+		{
+			testName: "Test with 15 float32 elements for min-heap with popping",
+			data:     []float32{98.0, 62.0, 80.0, 44.0, 56.0, 76.0, 17.0, 23.0, 22.0, 55.0, 16.0, 46.0, 2.0, 16.0, 11.0},
+			expected: float32(2.0),
+		},
+		{
+			testName: "Test with 15 float64 elements for min-heap with popping",
+			data:     []float64{98.0, 62.0, 80.0, 44.0, 56.0, 76.0, 17.0, 23.0, 22.0, 55.0, 16.0, 46.0, 2.0, 16.0, 11.0},
+			expected: float64(2.0),
+		},
+		{
+			testName: "Test with 5 string elements for min-heap with popping",
+			data:     []string{"apple", "banana", "cherry", "date", "elderberry"},
+			expected: "apple",
+		},
+		{
+			testName: "Test with 3 elements of type []int for min-heap with popping",
+			data: [][]int{
+				{4, 5, 6},
+				{7, 8, 9},
+				{10, 11, 12},
+			},
+			expected: []int{4, 5, 6},
+		},
+		{
+			testName: "Test with 3 elements of type []int32 for min-heap with popping",
+			data: [][]int32{
+				{4, 5, 6},
+				{7, 8, 9},
+				{10, 11, 12},
+			},
+			expected: []int32{4, 5, 6},
+		},
+		{
+			testName: "Test with 3 elements of type []int64 for min-heap with popping",
+			data: [][]int64{
+				{4, 5, 6},
+				{7, 8, 9},
+				{10, 11, 12},
+			},
+			expected: []int64{4, 5, 6},
+		},
+		{
+			testName: "Test with 3 elements of type []float32 for min-heap with popping",
+			data: [][]float32{
+				{4.4, 5.5, 6.6},
+				{7.7, 8.8, 9.9},
+				{10.10, 11.11, 12.12},
+			},
+			expected: []float32{4.4, 5.5, 6.6},
+		},
+		{
+			testName: "Test with 3 elements of type []float64 for min-heap with popping",
+			data: [][]float64{
+				{4.4, 5.5, 6.6},
+				{7.7, 8.8, 9.9},
+				{10.10, 11.11, 12.12},
+			},
+			expected: []float64{4.4, 5.5, 6.6},
+		},
+		{
+			testName: "Test with 3 elements of type []string for min-heap with popping",
+			data: [][]string{
+				{"apple", "banana", "cherry"},
+				{"date", "elderberry", "fig"},
+				{"kiwi", "lemon", "mango"},
+			},
+			expected: []string{"apple", "banana", "cherry"},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.testName, func(t *testing.T) {
+			switch v := test.data.(type) {
+			case []int:
+				less := func(a, b int) bool { return a < b }
+				equals := func(a, b int) bool { return a == b }
+				h := heap.NewMinHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case []int32:
+				less := func(a, b int32) bool { return a < b }
+				equals := func(a, b int32) bool { return a == b }
+				h := heap.NewMinHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case []int64:
+				less := func(a, b int64) bool { return a < b }
+				equals := func(a, b int64) bool { return a == b }
+				h := heap.NewMinHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case []float32:
+				less := func(a, b float32) bool { return a < b }
+				equals := func(a, b float32) bool { return a == b }
+				h := heap.NewMinHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case []float64:
+				less := func(a, b float64) bool { return a < b }
+				equals := func(a, b float64) bool { return a == b }
+				h := heap.NewMinHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case []string:
+				less := func(a, b string) bool { return a < b }
+				equals := func(a, b string) bool { return a == b }
+				h := heap.NewMinHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case [][]int:
+				less := func(a, b []int) bool { return lessSlice(a, b) }
+				equals := func(a, b []int) bool { return equalsSlice(a, b) }
+				h := heap.NewMinHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case [][]int32:
+				less := func(a, b []int32) bool { return lessSlice(a, b) }
+				equals := func(a, b []int32) bool { return equalsSlice(a, b) }
+				h := heap.NewMinHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case [][]int64:
+				less := func(a, b []int64) bool { return lessSlice(a, b) }
+				equals := func(a, b []int64) bool { return equalsSlice(a, b) }
+				h := heap.NewMinHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case [][]float32:
+				less := func(a, b []float32) bool { return lessSlice(a, b) }
+				equals := func(a, b []float32) bool { return equalsSlice(a, b) }
+				h := heap.NewMinHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case [][]float64:
+				less := func(a, b []float64) bool { return lessSlice(a, b) }
+				equals := func(a, b []float64) bool { return equalsSlice(a, b) }
+				h := heap.NewMinHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
+			case [][]string:
+				less := func(a, b []string) bool { return lessSlice(a, b) }
+				equals := func(a, b []string) bool { return equalsSlice(a, b) }
+				h := heap.NewMinHeap(v, less, equals)
+				popedElem, err := h.Pop()
+				if err != nil {
+					panic(err)
+				} else {
+					assert.Equal(t, test.expected, popedElem)
+				}
 			}
 		})
 	}
