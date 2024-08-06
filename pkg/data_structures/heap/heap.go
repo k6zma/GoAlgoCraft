@@ -100,6 +100,32 @@ func (h *Heap[T]) BuildHeap() {
 	}
 }
 
+// IsHeap checks whether the heap property is maintained throughout the heap.
+//
+// 1. Iterates through all non-leaf nodes (indices from 0 to heapSize/2 - 1);
+//
+// 2. For each node, checks if the node is less than its left child or right child;
+//
+// 3. If any node violates the heap property, returns false;
+//
+// 4. If all nodes satisfy the heap property, returns true.
+func (h *Heap[T]) IsHeap() bool {
+	heapSize := h.Len()
+	for i := 0; i < heapSize/2; i++ {
+		left := 2*i + 1
+		right := 2*i + 2
+
+		if left < heapSize && h.Less(h.Data[left], h.Data[i]) {
+			return false
+		}
+		if right < heapSize && h.Less(h.Data[right], h.Data[i]) {
+			return false
+		}
+	}
+
+	return true
+}
+
 // Push adds a new element to the heap.
 //
 // 1. Appends the element to the end of the heap;
