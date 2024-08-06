@@ -104,7 +104,7 @@ func (h *Heap[T]) BuildHeap() {
 //
 // 1. Iterates through all non-leaf nodes (indices from 0 to heapSize/2 - 1);
 //
-// 2. For each node, checks if the node is less than its left child or right child;
+// 2. For each node, checks if the node is less/more than its left child or right child;
 //
 // 3. If any node violates the heap property, returns false;
 //
