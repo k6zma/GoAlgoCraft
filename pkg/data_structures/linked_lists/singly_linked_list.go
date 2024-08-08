@@ -246,3 +246,20 @@ func (sll *SinglyLinkedList[T]) PrintList() {
 
 	fmt.Println()
 }
+
+// LinkedListToSlice converts the linked list to a slice.
+func (sll *SinglyLinkedList[T]) LinkedListToSlice() ([]T, error) {
+	var result []T
+	current := sll.head
+
+	if current == nil {
+		return result, ErrListEmpty
+	}
+
+	for current != nil {
+		result = append(result, current.value())
+		current = current.next
+	}
+
+	return result, nil
+}

@@ -259,3 +259,20 @@ func (dll *DoublyLinkedList[T]) PrintList() {
 
 	fmt.Println()
 }
+
+// LinkedListToSlice converts the linked list to a slice.
+func (dll *DoublyLinkedList[T]) LinkedListToSlice() ([]T, error) {
+	var result []T
+	current := dll.head
+
+	if current == nil {
+		return result, ErrListEmpty
+	}
+
+	for current != nil {
+		result = append(result, current.value())
+		current = current.next
+	}
+
+	return result, nil
+}
