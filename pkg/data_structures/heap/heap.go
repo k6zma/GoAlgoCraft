@@ -1,11 +1,6 @@
 package heap
 
-import (
-	"errors"
-	"fmt"
-)
-
-var ErrHeapEmpty = errors.New("heap is empty")
+import "fmt"
 
 // Heap represents a heap data structure.
 //
