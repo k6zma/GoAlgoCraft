@@ -46,6 +46,21 @@ func (sll *SinglyLinkedList[T]) Len() int {
 	return sll.len
 }
 
+// Head returns the pointer to the head of the list.
+func (sll *SinglyLinkedList[T]) Head() *NodeSinglyLinked[T] {
+	return sll.head
+}
+
+// Next returns the pointer to the next node.
+func (sll *SinglyLinkedList[T]) Next(node *NodeSinglyLinked[T]) *NodeSinglyLinked[T] {
+	return node.next
+}
+
+// ValueOfNode returns value of the node.
+func (sll *SinglyLinkedList[T]) ValueOfNode(node *NodeSinglyLinked[T]) T {
+	return node.value
+}
+
 // InsertAtBeginning inserts a new element at the beginning of the list.
 //
 // Parameters:
