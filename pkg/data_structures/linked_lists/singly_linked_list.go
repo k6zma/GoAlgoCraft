@@ -46,13 +46,13 @@ func (sll *SinglyLinkedList[T]) Len() int {
 	return sll.len
 }
 
-// Head returns the pointer to the head of the list.
-func (sll *SinglyLinkedList[T]) Head() *NodeSinglyLinked[T] {
+// HeadOfList returns the pointer to the head of the list.
+func (sll *SinglyLinkedList[T]) HeadOfList() *NodeSinglyLinked[T] {
 	return sll.head
 }
 
-// Next returns the pointer to the next node.
-func (node *NodeSinglyLinked[T]) Next() *NodeSinglyLinked[T] {
+// NextNode returns the pointer to the next node.
+func (node *NodeSinglyLinked[T]) NextNode() *NodeSinglyLinked[T] {
 	return node.next
 }
 
