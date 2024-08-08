@@ -52,12 +52,12 @@ func (sll *SinglyLinkedList[T]) Head() *NodeSinglyLinked[T] {
 }
 
 // Next returns the pointer to the next node.
-func (sll *SinglyLinkedList[T]) Next(node *NodeSinglyLinked[T]) *NodeSinglyLinked[T] {
+func (node *NodeSinglyLinked[T]) Next() *NodeSinglyLinked[T] {
 	return node.next
 }
 
 // ValueOfNode returns value of the node.
-func (sll *SinglyLinkedList[T]) ValueOfNode(node *NodeSinglyLinked[T]) T {
+func (node *NodeSinglyLinked[T]) ValueOfNode() T {
 	return node.value
 }
 
