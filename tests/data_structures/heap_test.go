@@ -8,27 +8,27 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type testLen struct {
+type testLenHeap struct {
 	testName string
 	data     interface{}
 	expected int
 }
 
-type testBuilding struct {
+type testBuildingHeap struct {
 	testName          string
 	data              interface{}
 	expectedData      interface{}
 	expectedBuildFlag bool
 }
 
-type testPushing struct {
+type testPushingHeap struct {
 	testName       string
 	pushingElement interface{}
 	originalData   interface{}
 	expectedData   interface{}
 }
 
-type testPopping struct {
+type testPoppingHeap struct {
 	testName string
 	data     interface{}
 	expected interface{}
@@ -165,7 +165,7 @@ func equalsSlice(a, b interface{}) bool {
 }
 
 func TestHeapLen(t *testing.T) {
-	tests := []testLen{
+	tests := []testLenHeap{
 		{
 			testName: "Test with no elements of type int",
 			data:     []int{},
@@ -469,7 +469,7 @@ func TestHeapLen(t *testing.T) {
 }
 
 func TestMaxHeapBuild(t *testing.T) {
-	tests := []testBuilding{
+	tests := []testBuildingHeap{
 		{
 			testName:          "Test with 15 int elements for max-heap",
 			data:              []int{76, 44, 2, 22, 16, 46, 17, 23, 62, 55, 56, 98, 80, 16, 11},
@@ -729,7 +729,7 @@ func TestMaxHeapBuild(t *testing.T) {
 }
 
 func TestMinHeapBuild(t *testing.T) {
-	tests := []testBuilding{
+	tests := []testBuildingHeap{
 		{
 			testName:          "Test with 15 int elements for min-heap",
 			data:              []int{76, 44, 2, 22, 16, 46, 17, 23, 62, 55, 56, 98, 80, 16, 11},
@@ -988,7 +988,7 @@ func TestMinHeapBuild(t *testing.T) {
 }
 
 func TestMaxHeapPushing(t *testing.T) {
-	tests := []testPushing{
+	tests := []testPushingHeap{
 		{
 			testName:       "Test with 15 int elements for max-heap with pushing 54",
 			pushingElement: 54,
@@ -1198,7 +1198,7 @@ func TestMaxHeapPushing(t *testing.T) {
 }
 
 func TestMinHeapPushing(t *testing.T) {
-	tests := []testPushing{
+	tests := []testPushingHeap{
 		{
 			testName:       "Test with 15 int32 elements for max-heap with pushing 54",
 			pushingElement: 54,
@@ -1408,7 +1408,7 @@ func TestMinHeapPushing(t *testing.T) {
 }
 
 func TestMaxHeapPopping(t *testing.T) {
-	tests := []testPopping{
+	tests := []testPoppingHeap{
 		{
 			testName: "Test with 15 int elements for max-heap with popping",
 			data:     []int{98, 62, 80, 44, 56, 76, 17, 23, 22, 55, 16, 46, 2, 16, 11},
@@ -1624,7 +1624,7 @@ func TestMaxHeapPopping(t *testing.T) {
 }
 
 func TestMinHeapPopping(t *testing.T) {
-	tests := []testPopping{
+	tests := []testPoppingHeap{
 		{
 			testName: "Test with 15 int elements for min-heap with popping",
 			data:     []int{98, 62, 80, 44, 56, 76, 17, 23, 22, 55, 16, 46, 2, 16, 11},
