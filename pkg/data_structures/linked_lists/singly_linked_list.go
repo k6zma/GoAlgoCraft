@@ -79,15 +79,13 @@ func (sll *SinglyLinkedList[T]) InsertAtEnd(elem T) {
 
 	if sll.head == nil {
 		sll.head = newNode
-		return
+	} else {
+		current := sll.head
+		for current.next != nil {
+			current = current.next
+		}
+		current.next = newNode
 	}
-
-	current := sll.head
-	for current.next != nil {
-		current = current.next
-	}
-
-	current.next = newNode
 
 	sll.len++
 }
