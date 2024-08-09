@@ -1,4 +1,4 @@
-package data_structures
+package custom_comparators
 
 import "reflect"
 
