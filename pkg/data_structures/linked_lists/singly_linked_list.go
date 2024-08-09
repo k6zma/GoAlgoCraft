@@ -31,12 +31,8 @@ type SinglyLinkedList[T any] struct {
 //   - values: optional initial values to populate the list.
 //
 // Returns a pointer to the new SinglyLinkedList.
-func NewSinglyLinkedList[T any](equalsFunc func(a, b T) bool, values ...T) *SinglyLinkedList[T] {
+func NewSinglyLinkedList[T any](equalsFunc func(a, b T) bool) *SinglyLinkedList[T] {
 	list := &SinglyLinkedList[T]{equals: equalsFunc}
-	for _, value := range values {
-		list.InsertAtEnd(value)
-		list.len++
-	}
 
 	return list
 }
@@ -272,7 +268,7 @@ func (sll *SinglyLinkedList[T]) LinkedListToSlice() ([]T, error) {
 	}
 
 	for current != nil {
-		result = append(result, current.value())
+		result = append(result, current.value)
 		current = current.next
 	}
 

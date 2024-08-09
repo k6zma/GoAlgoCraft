@@ -35,12 +35,8 @@ type DoublyLinkedList[T any] struct {
 //   - values: optional initial values to populate the list.
 //
 // Returns a pointer to the new DoublyLinkedList.
-func NewDoublyLinkedList[T any](equalsFunc func(a, b T) bool, values ...T) *DoublyLinkedList[T] {
+func NewDoublyLinkedList[T any](equalsFunc func(a, b T) bool) *DoublyLinkedList[T] {
 	list := &DoublyLinkedList[T]{equals: equalsFunc}
-	for _, value := range values {
-		list.InsertAtEnd(value)
-		list.len++
-	}
 
 	return list
 }
@@ -270,7 +266,7 @@ func (dll *DoublyLinkedList[T]) LinkedListToSlice() ([]T, error) {
 	}
 
 	for current != nil {
-		result = append(result, current.value())
+		result = append(result, current.value)
 		current = current.next
 	}
 
