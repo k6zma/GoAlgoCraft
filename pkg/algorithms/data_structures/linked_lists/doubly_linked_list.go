@@ -9,9 +9,9 @@ import "fmt"
 //   - next: a pointer to the next node in the list;
 //   - prev: a pointer to the previous node in the list.
 type NodeDoublyLinked[T any] struct {
-	value T
-	next  *NodeDoublyLinked[T]
-	prev  *NodeDoublyLinked[T]
+	Value T
+	Next  *NodeDoublyLinked[T]
+	Prev  *NodeDoublyLinked[T]
 }
 
 // DoublyLinkedList represents a doubly linked list.
@@ -22,10 +22,10 @@ type NodeDoublyLinked[T any] struct {
 //   - len: the number of elements in the list;
 //   - equals: a function to compare equality of two elements.
 type DoublyLinkedList[T any] struct {
-	head   *NodeDoublyLinked[T]
-	tail   *NodeDoublyLinked[T]
-	len    int
-	equals func(a, b T) bool
+	Head      *NodeDoublyLinked[T]
+	Tail      *NodeDoublyLinked[T]
+	LenOfList int
+	Equals    func(a, b T) bool
 }
 
 // NewDoublyLinkedList creates a new doubly linked list with optional initial values.
@@ -36,14 +36,14 @@ type DoublyLinkedList[T any] struct {
 //
 // Returns a pointer to the new DoublyLinkedList.
 func NewDoublyLinkedList[T any](equalsFunc func(a, b T) bool) *DoublyLinkedList[T] {
-	list := &DoublyLinkedList[T]{equals: equalsFunc}
+	list := &DoublyLinkedList[T]{Equals: equalsFunc}
 
 	return list
 }
 
 // Len returns the number of elements in the list.
 func (dll *DoublyLinkedList[T]) Len() int {
-	return dll.len
+	return dll.LenOfList
 }
 
 // InsertAtBeginning inserts a new element at the beginning of the list.
@@ -51,18 +51,18 @@ func (dll *DoublyLinkedList[T]) Len() int {
 // Parameters:
 //   - elem: the element to be inserted.
 func (dll *DoublyLinkedList[T]) InsertAtBeginning(elem T) {
-	newNode := &NodeDoublyLinked[T]{value: elem}
+	newNode := &NodeDoublyLinked[T]{Value: elem}
 
-	newNode.next = dll.head
-	if dll.head != nil {
-		dll.head.prev = newNode
+	newNode.Next = dll.Head
+	if dll.Head != nil {
+		dll.Head.Prev = newNode
 	} else {
-		dll.tail = newNode
+		dll.Tail = newNode
 	}
 
-	dll.head = newNode
+	dll.Head = newNode
 
-	dll.len++
+	dll.LenOfList++
 }
 
 // InsertAtEnd inserts a new element at the end of the list.
@@ -70,18 +70,18 @@ func (dll *DoublyLinkedList[T]) InsertAtBeginning(elem T) {
 // Parameters:
 //   - elem: the element to be inserted.
 func (dll *DoublyLinkedList[T]) InsertAtEnd(elem T) {
-	newNode := &NodeDoublyLinked[T]{value: elem}
+	newNode := &NodeDoublyLinked[T]{Value: elem}
 
-	if dll.head == nil {
-		dll.head = newNode
-		dll.tail = newNode
+	if dll.Head == nil {
+		dll.Head = newNode
+		dll.Tail = newNode
 	} else {
-		newNode.prev = dll.tail
-		dll.tail.next = newNode
-		dll.tail = newNode
+		newNode.Prev = dll.Tail
+		dll.Tail.Next = newNode
+		dll.Tail = newNode
 	}
 
-	dll.len++
+	dll.LenOfList++
 }
 
 // InsertAtPos inserts a new element at the specified position in the list.
@@ -92,45 +92,45 @@ func (dll *DoublyLinkedList[T]) InsertAtEnd(elem T) {
 //
 // Returns an error if the position is invalid.
 func (dll *DoublyLinkedList[T]) InsertAtPos(elem T, pos int) error {
-	if pos < 0 || pos > dll.len {
+	if pos < 0 || pos > dll.LenOfList {
 		return ErrInvalidPos
 	}
 
-	newNode := &NodeDoublyLinked[T]{value: elem}
+	newNode := &NodeDoublyLinked[T]{Value: elem}
 
 	if pos == 0 {
-		newNode.next = dll.head
-		if dll.head != nil {
-			dll.head.prev = newNode
+		newNode.Next = dll.Head
+		if dll.Head != nil {
+			dll.Head.Prev = newNode
 		}
-		dll.head = newNode
-		if dll.len == 0 {
-			dll.tail = newNode
+		dll.Head = newNode
+		if dll.LenOfList == 0 {
+			dll.Tail = newNode
 		}
-	} else if pos == dll.len {
-		newNode.prev = dll.tail
-		if dll.tail != nil {
-			dll.tail.next = newNode
+	} else if pos == dll.LenOfList {
+		newNode.Prev = dll.Tail
+		if dll.Tail != nil {
+			dll.Tail.Next = newNode
 		}
-		dll.tail = newNode
+		dll.Tail = newNode
 	} else {
-		current := dll.head
+		current := dll.Head
 		for i := 0; i < pos; i++ {
 			if current == nil {
 				return ErrPosOutOfRange
 			}
-			current = current.next
+			current = current.Next
 		}
 
-		newNode.next = current
-		newNode.prev = current.prev
-		if current.prev != nil {
-			current.prev.next = newNode
+		newNode.Next = current
+		newNode.Prev = current.Prev
+		if current.Prev != nil {
+			current.Prev.Next = newNode
 		}
-		current.prev = newNode
+		current.Prev = newNode
 	}
 
-	dll.len++
+	dll.LenOfList++
 
 	return nil
 }
@@ -139,19 +139,19 @@ func (dll *DoublyLinkedList[T]) InsertAtPos(elem T, pos int) error {
 //
 // Returns an error if the list is empty.
 func (dll *DoublyLinkedList[T]) RemoveFirstNode() error {
-	if dll.head == nil {
+	if dll.Head == nil {
 		return ErrListEmpty
 	}
 
-	if dll.head.next != nil {
-		dll.head = dll.head.next
-		dll.head.prev = nil
+	if dll.Head.Next != nil {
+		dll.Head = dll.Head.Next
+		dll.Head.Prev = nil
 	} else {
-		dll.head = nil
-		dll.tail = nil
+		dll.Head = nil
+		dll.Tail = nil
 	}
 
-	dll.len--
+	dll.LenOfList--
 
 	return nil
 }
@@ -160,19 +160,19 @@ func (dll *DoublyLinkedList[T]) RemoveFirstNode() error {
 //
 // Returns an error if the list is empty.
 func (dll *DoublyLinkedList[T]) RemoveLastNode() error {
-	if dll.tail == nil {
+	if dll.Tail == nil {
 		return ErrListEmpty
 	}
 
-	if dll.tail.prev != nil {
-		dll.tail = dll.tail.prev
-		dll.tail.next = nil
+	if dll.Tail.Prev != nil {
+		dll.Tail = dll.Tail.Prev
+		dll.Tail.Next = nil
 	} else {
-		dll.head = nil
-		dll.tail = nil
+		dll.Head = nil
+		dll.Tail = nil
 	}
 
-	dll.len--
+	dll.LenOfList--
 
 	return nil
 }
@@ -184,25 +184,25 @@ func (dll *DoublyLinkedList[T]) RemoveLastNode() error {
 //
 // Returns an error if the position is invalid or the list is empty.
 func (dll *DoublyLinkedList[T]) RemoveNodeAtPosition(position int) error {
-	if position < 0 || position >= dll.len {
+	if position < 0 || position >= dll.LenOfList {
 		return ErrInvalidPos
 	}
 
 	if position == 0 {
 		return dll.RemoveFirstNode()
-	} else if position == dll.len-1 {
+	} else if position == dll.LenOfList-1 {
 		return dll.RemoveLastNode()
 	}
 
-	current := dll.head
+	current := dll.Head
 	for i := 0; i < position; i++ {
-		current = current.next
+		current = current.Next
 	}
 
-	current.prev.next = current.next
-	current.next.prev = current.prev
+	current.Prev.Next = current.Next
+	current.Next.Prev = current.Prev
 
-	dll.len--
+	dll.LenOfList--
 
 	return nil
 }
@@ -214,14 +214,14 @@ func (dll *DoublyLinkedList[T]) RemoveNodeAtPosition(position int) error {
 //
 // Returns the position of the element and an error if the value is not found.
 func (dll *DoublyLinkedList[T]) FindNode(value T) (int, error) {
-	current := dll.head
+	current := dll.Head
 	index := 0
 
 	for current != nil {
-		if dll.equals(current.value, value) {
+		if dll.Equals(current.Value, value) {
 			return index, nil
 		}
-		current = current.next
+		current = current.Next
 		index++
 	}
 
@@ -231,26 +231,26 @@ func (dll *DoublyLinkedList[T]) FindNode(value T) (int, error) {
 // Reverse reverses the linked list.
 func (dll *DoublyLinkedList[T]) Reverse() {
 	var prev *NodeDoublyLinked[T]
-	current := dll.head
-	dll.tail = current
+	current := dll.Head
+	dll.Tail = current
 
 	for current != nil {
-		next := current.next
-		current.next = prev
-		current.prev = next
+		next := current.Next
+		current.Next = prev
+		current.Prev = next
 		prev = current
 		current = next
 	}
 
-	dll.head = prev
+	dll.Head = prev
 }
 
 // PrintList prints the elements of the list to the standard output.
 func (dll *DoublyLinkedList[T]) PrintList() {
-	current := dll.head
+	current := dll.Head
 	for current != nil {
-		fmt.Print(current.value, " ")
-		current = current.next
+		fmt.Print(current.Value, " ")
+		current = current.Next
 	}
 
 	fmt.Println()
@@ -259,15 +259,15 @@ func (dll *DoublyLinkedList[T]) PrintList() {
 // LinkedListToSlice converts the linked list to a slice.
 func (dll *DoublyLinkedList[T]) LinkedListToSlice() ([]T, error) {
 	var result []T
-	current := dll.head
+	current := dll.Head
 
 	if current == nil {
 		return result, ErrListEmpty
 	}
 
 	for current != nil {
-		result = append(result, current.value)
-		current = current.next
+		result = append(result, current.Value)
+		current = current.Next
 	}
 
 	return result, nil

@@ -8,8 +8,8 @@ import "fmt"
 //   - value: the value stored in the node;
 //   - next: a pointer to the next node in the list.
 type NodeSinglyLinked[T any] struct {
-	value T
-	next  *NodeSinglyLinked[T]
+	Value T
+	Next  *NodeSinglyLinked[T]
 }
 
 // SinglyLinkedList represents a singly linked list.
@@ -19,9 +19,9 @@ type NodeSinglyLinked[T any] struct {
 //   - len: the number of elements in the list;
 //   - equals: a function to compare equality of two elements.
 type SinglyLinkedList[T any] struct {
-	head   *NodeSinglyLinked[T]
-	len    int
-	equals func(a, b T) bool
+	Head      *NodeSinglyLinked[T]
+	LenOfList int
+	Equals    func(a, b T) bool
 }
 
 // NewSinglyLinkedList creates a new singly linked list with optional initial values.
@@ -32,29 +32,29 @@ type SinglyLinkedList[T any] struct {
 //
 // Returns a pointer to the new SinglyLinkedList.
 func NewSinglyLinkedList[T any](equalsFunc func(a, b T) bool) *SinglyLinkedList[T] {
-	list := &SinglyLinkedList[T]{equals: equalsFunc}
+	list := &SinglyLinkedList[T]{Equals: equalsFunc}
 
 	return list
 }
 
 // Len returns the number of elements in the list.
 func (sll *SinglyLinkedList[T]) Len() int {
-	return sll.len
+	return sll.LenOfList
 }
 
 // HeadOfList returns the pointer to the head of the list.
 func (sll *SinglyLinkedList[T]) HeadOfList() *NodeSinglyLinked[T] {
-	return sll.head
+	return sll.Head
 }
 
 // NextNode returns the pointer to the next node.
 func (node *NodeSinglyLinked[T]) NextNode() *NodeSinglyLinked[T] {
-	return node.next
+	return node.Next
 }
 
 // ValueOfNode returns value of the node.
 func (node *NodeSinglyLinked[T]) ValueOfNode() T {
-	return node.value
+	return node.Value
 }
 
 // InsertAtBeginning inserts a new element at the beginning of the list.
@@ -62,12 +62,12 @@ func (node *NodeSinglyLinked[T]) ValueOfNode() T {
 // Parameters:
 //   - elem: the element to be inserted.
 func (sll *SinglyLinkedList[T]) InsertAtBeginning(elem T) {
-	newNode := &NodeSinglyLinked[T]{value: elem}
+	newNode := &NodeSinglyLinked[T]{Value: elem}
 
-	newNode.next = sll.head
-	sll.head = newNode
+	newNode.Next = sll.Head
+	sll.Head = newNode
 
-	sll.len++
+	sll.LenOfList++
 }
 
 // InsertAtEnd inserts a new element at the end of the list.
@@ -75,19 +75,19 @@ func (sll *SinglyLinkedList[T]) InsertAtBeginning(elem T) {
 // Parameters:
 //   - elem: the element to be inserted.
 func (sll *SinglyLinkedList[T]) InsertAtEnd(elem T) {
-	newNode := &NodeSinglyLinked[T]{value: elem}
+	newNode := &NodeSinglyLinked[T]{Value: elem}
 
-	if sll.head == nil {
-		sll.head = newNode
+	if sll.Head == nil {
+		sll.Head = newNode
 	} else {
-		current := sll.head
-		for current.next != nil {
-			current = current.next
+		current := sll.Head
+		for current.Next != nil {
+			current = current.Next
 		}
-		current.next = newNode
+		current.Next = newNode
 	}
 
-	sll.len++
+	sll.LenOfList++
 }
 
 // InsertAtPos inserts a new element at the specified position in the list.
@@ -98,30 +98,30 @@ func (sll *SinglyLinkedList[T]) InsertAtEnd(elem T) {
 //
 // Returns an error if the position is invalid.
 func (sll *SinglyLinkedList[T]) InsertAtPos(elem T, pos int) error {
-	if pos < 0 || pos > sll.len {
+	if pos < 0 || pos > sll.LenOfList {
 		return ErrInvalidPos
 	}
 
-	newNode := &NodeSinglyLinked[T]{value: elem}
+	newNode := &NodeSinglyLinked[T]{Value: elem}
 
 	if pos == 0 {
-		newNode.next = sll.head
-		sll.head = newNode
+		newNode.Next = sll.Head
+		sll.Head = newNode
 	} else {
-		current := sll.head
+		current := sll.Head
 		for i := 0; i < pos-1; i++ {
 			if current == nil {
 				return ErrPosOutOfRange
 			}
 
-			current = current.next
+			current = current.Next
 		}
 
-		newNode.next = current.next
-		current.next = newNode
+		newNode.Next = current.Next
+		current.Next = newNode
 	}
 
-	sll.len++
+	sll.LenOfList++
 
 	return nil
 }
@@ -130,12 +130,12 @@ func (sll *SinglyLinkedList[T]) InsertAtPos(elem T, pos int) error {
 //
 // Returns an error if the list is empty.
 func (sll *SinglyLinkedList[T]) RemoveFirstNode() error {
-	if sll.head == nil {
+	if sll.Head == nil {
 		return ErrListEmpty
 	}
 
-	sll.head = sll.head.next
-	sll.len--
+	sll.Head = sll.Head.Next
+	sll.LenOfList--
 
 	return nil
 }
@@ -144,23 +144,23 @@ func (sll *SinglyLinkedList[T]) RemoveFirstNode() error {
 //
 // Returns an error if the list is empty.
 func (sll *SinglyLinkedList[T]) RemoveLastNode() error {
-	if sll.head == nil {
+	if sll.Head == nil {
 		return ErrListEmpty
 	}
 
-	if sll.head.next == nil {
-		sll.head = nil
-		sll.len--
+	if sll.Head.Next == nil {
+		sll.Head = nil
+		sll.LenOfList--
 		return nil
 	}
 
-	current := sll.head
-	for current.next.next != nil {
-		current = current.next
+	current := sll.Head
+	for current.Next.Next != nil {
+		current = current.Next
 	}
 
-	current.next = nil
-	sll.len--
+	current.Next = nil
+	sll.LenOfList--
 
 	return nil
 }
@@ -172,29 +172,29 @@ func (sll *SinglyLinkedList[T]) RemoveLastNode() error {
 //
 // Returns an error if the position is invalid or the list is empty.
 func (sll *SinglyLinkedList[T]) RemoveNodeAtPosition(position int) error {
-	if position < 0 || sll.head == nil {
+	if position < 0 || sll.Head == nil {
 		return ErrInvalidPos
 	}
 
 	if position == 0 {
-		sll.head = sll.head.next
-		sll.len--
+		sll.Head = sll.Head.Next
+		sll.LenOfList--
 
 		return nil
 	}
 
-	current := sll.head
+	current := sll.Head
 	for i := 0; i < position-1 && current != nil; i++ {
-		current = current.next
+		current = current.Next
 	}
 
-	if current == nil || current.next == nil {
+	if current == nil || current.Next == nil {
 		return ErrPosOutOfRange
 	}
 
-	current.next = current.next.next
+	current.Next = current.Next.Next
 
-	sll.len--
+	sll.LenOfList--
 
 	return nil
 }
@@ -206,15 +206,15 @@ func (sll *SinglyLinkedList[T]) RemoveNodeAtPosition(position int) error {
 //
 // Returns the position of the element and an error if the value is not found.
 func (sll *SinglyLinkedList[T]) FindNode(value T) (int, error) {
-	current := sll.head
+	current := sll.Head
 	index := 0
 
 	for current != nil {
-		if sll.equals(current.value, value) {
+		if sll.Equals(current.Value, value) {
 			return index, nil
 		}
 
-		current = current.next
+		current = current.Next
 		index++
 	}
 
@@ -223,7 +223,7 @@ func (sll *SinglyLinkedList[T]) FindNode(value T) (int, error) {
 
 // Reverse reverses the linked list.
 func (sll *SinglyLinkedList[T]) Reverse() {
-	sll.head = reverse(sll.head, nil)
+	sll.Head = reverse(sll.Head, nil)
 }
 
 // reverse is a helper function to recursively reverse the linked list.
@@ -238,19 +238,19 @@ func reverse[T any](current, prev *NodeSinglyLinked[T]) *NodeSinglyLinked[T] {
 		return prev
 	}
 
-	next := current.next
-	current.next = prev
+	next := current.Next
+	current.Next = prev
 
 	return reverse(next, current)
 }
 
 // PrintList prints the elements of the list to the standard output.
 func (sll *SinglyLinkedList[T]) PrintList() {
-	current := sll.head
+	current := sll.Head
 
 	for current != nil {
-		fmt.Print(current.value, " ")
-		current = current.next
+		fmt.Print(current.Value, " ")
+		current = current.Next
 	}
 
 	fmt.Println()
@@ -259,15 +259,15 @@ func (sll *SinglyLinkedList[T]) PrintList() {
 // LinkedListToSlice converts the linked list to a slice.
 func (sll *SinglyLinkedList[T]) LinkedListToSlice() ([]T, error) {
 	var result []T
-	current := sll.head
+	current := sll.Head
 
 	if current == nil {
 		return result, ErrListEmpty
 	}
 
 	for current != nil {
-		result = append(result, current.value)
-		current = current.next
+		result = append(result, current.Value)
+		current = current.Next
 	}
 
 	return result, nil
