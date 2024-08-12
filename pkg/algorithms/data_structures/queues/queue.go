@@ -96,7 +96,7 @@ func (q *Queue[T]) Pop() (T, error) {
 // Returns an error if the position is invalid.
 func (q *Queue[T]) RemoveElemAtPos(pos int) error {
 	if pos < 0 || pos >= q.LenOfQueue {
-		return ErrInvalidPos
+		return ErrInvalidPosQueue
 	}
 
 	if pos == 0 {
@@ -128,6 +128,27 @@ func (q *Queue[T]) RemoveElemAtPos(pos int) error {
 	return nil
 }
 
+// GetElemAtPos returns the element at the specified position in the queue.
+//
+// Parameters:
+//   - pos: the zero-based position of the element to retrieve.
+//
+// Returns the element at the specified position and an error if the position is invalid.
+func (q *Queue[T]) GetElemAtPos(pos int) (T, error) {
+	var result T
+
+	if pos < 0 || pos >= q.LenOfQueue {
+		return result, ErrInvalidPosQueue
+	}
+
+	current := q.Head
+	for i := 0; i < pos; i++ {
+		current = current.Next
+	}
+
+	return current.Value, nil
+}
+
 // FindElem searches for an element in the queue and returns its position.
 //
 // Parameters:
@@ -147,7 +168,7 @@ func (q *Queue[T]) FindElem(elem T) (int, error) {
 		index++
 	}
 
-	return -1, ErrElemNotFound
+	return -1, ErrElemNotFoundQueue
 }
 
 // Reverse reverses the queue.
