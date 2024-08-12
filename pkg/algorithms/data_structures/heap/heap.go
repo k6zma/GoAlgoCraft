@@ -8,20 +8,42 @@ import "fmt"
 //
 //   - Data: a slice containing heap elements;
 //
-//   - less: a function (comparator) that should return true if the first element is less than the second.
-//     Example: func less(a, b int) bool { return a < b };
+//   - Comparator: a function to compare two values.
+//     Example:
+//     func Comparator(a, b int) bool { return a < b }; - min-heap (a < b -> True)
+//     func Comparator(a, b int) bool { return a > b}; - max-heap (a > b -> True)
 //
 //   - equals: a function (comparator) that determines the equality of elements.
 //     Example: func equals(a, b int) bool { return a < b }.
 type Heap[T any] struct {
-	Data   []T
-	Less   func(a, b T) bool
-	Equals func(a, b T) bool
+	Data       []T
+	Comparator func(a, b T) bool
+	Equals     func(a, b T) bool
 }
 
-// Compares two elements in the heap by their indices using the Less function.
+// NewHeap creates a new Heap object, initializing it with the given data, comparator, and equality functions.
+//
+// Parameters:
+//   - data: A slice of elements to be used in the heap.
+//   - comparator: A function to define the order of elements in the heap (e.g., for a min-heap or max-heap).
+//   - equals: A function to determine if two elements are equal.
+//
+// Returns:
+//   - A pointer to the newly created Heap with the provided data and functions. The heap property is enforced immediately after creation.
+func NewHeap[T any](data []T, comparator func(a, b T) bool, equals func(a, b T) bool) *Heap[T] {
+	h := &Heap[T]{
+		Data:       data,
+		Comparator: comparator,
+		Equals:     equals,
+	}
+	h.BuildHeap()
+
+	return h
+}
+
+// Compares two elements in the heap by their indices using the Comparator function.
 func (h *Heap[T]) heapLess(i, j int) bool {
-	return h.Less(h.Data[i], h.Data[j])
+	return h.Comparator(h.Data[i], h.Data[j])
 }
 
 // Checks if two elements in the heap are equal by their indices using the Equals function.
@@ -99,7 +121,7 @@ func (h *Heap[T]) BuildHeap() {
 //
 // 1. Iterates through all non-leaf nodes (indices from 0 to heapSize/2 - 1);
 //
-// 2. For each node, checks if the node is less/more than its left child or right child;
+// 2. For each node, checks if the node is Comparator/more than its left child or right child;
 //
 // 3. If any node violates the heap property, returns false;
 //
@@ -110,10 +132,10 @@ func (h *Heap[T]) IsHeap() bool {
 		left := 2*i + 1
 		right := 2*i + 2
 
-		if left < heapSize && h.Less(h.Data[left], h.Data[i]) {
+		if left < heapSize && h.Comparator(h.Data[left], h.Data[i]) {
 			return false
 		}
-		if right < heapSize && h.Less(h.Data[right], h.Data[i]) {
+		if right < heapSize && h.Comparator(h.Data[right], h.Data[i]) {
 			return false
 		}
 	}

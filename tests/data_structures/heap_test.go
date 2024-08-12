@@ -275,64 +275,64 @@ func TestHeapLen(t *testing.T) {
 		t.Run(test.testName, func(t *testing.T) {
 			switch v := test.data.(type) {
 			case []int:
-				less := func(a, b int) bool { return a < b }
+				comparator := func(a, b int) bool { return a < b }
 				equals := func(a, b int) bool { return a == b }
-				h := heap.Heap[int]{Data: v, Less: less, Equals: equals}
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expected, h.Len())
 			case []int32:
-				less := func(a, b int32) bool { return a < b }
+				comparator := func(a, b int32) bool { return a < b }
 				equals := func(a, b int32) bool { return a == b }
-				h := heap.Heap[int32]{Data: v, Less: less, Equals: equals}
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expected, h.Len())
 			case []int64:
-				less := func(a, b int64) bool { return a < b }
+				comparator := func(a, b int64) bool { return a < b }
 				equals := func(a, b int64) bool { return a == b }
-				h := heap.Heap[int64]{Data: v, Less: less, Equals: equals}
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expected, h.Len())
 			case []float32:
-				less := func(a, b float32) bool { return a < b }
+				comparator := func(a, b float32) bool { return a < b }
 				equals := func(a, b float32) bool { return a == b }
-				h := heap.Heap[float32]{Data: v, Less: less, Equals: equals}
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expected, h.Len())
 			case []float64:
-				less := func(a, b float64) bool { return a < b }
+				comparator := func(a, b float64) bool { return a < b }
 				equals := func(a, b float64) bool { return a == b }
-				h := heap.Heap[float64]{Data: v, Less: less, Equals: equals}
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expected, h.Len())
 			case []string:
-				less := func(a, b string) bool { return a < b }
+				comparator := func(a, b string) bool { return a < b }
 				equals := func(a, b string) bool { return a == b }
-				h := heap.Heap[string]{Data: v, Less: less, Equals: equals}
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expected, h.Len())
 			case [][]int:
-				less := func(a, b []int) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []int) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []int) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.Heap[[]int]{Data: v, Less: less, Equals: equals}
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expected, h.Len())
 			case [][]int32:
-				less := func(a, b []int32) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []int32) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []int32) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.Heap[[]int32]{Data: v, Less: less, Equals: equals}
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expected, h.Len())
 			case [][]int64:
-				less := func(a, b []int64) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []int64) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []int64) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.Heap[[]int64]{Data: v, Less: less, Equals: equals}
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expected, h.Len())
 			case [][]float32:
-				less := func(a, b []float32) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []float32) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []float32) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.Heap[[]float32]{Data: v, Less: less, Equals: equals}
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expected, h.Len())
 			case [][]float64:
-				less := func(a, b []float64) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []float64) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []float64) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.Heap[[]float64]{Data: v, Less: less, Equals: equals}
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expected, h.Len())
 			case [][]string:
-				less := func(a, b []string) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []string) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []string) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.Heap[[]string]{Data: v, Less: less, Equals: equals}
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expected, h.Len())
 			}
 		})
@@ -523,75 +523,75 @@ func TestMaxHeapBuild(t *testing.T) {
 		t.Run(test.testName, func(t *testing.T) {
 			switch v := test.data.(type) {
 			case []int:
-				less := func(a, b int) bool { return a < b }
+				comparator := func(a, b int) bool { return a > b }
 				equals := func(a, b int) bool { return a == b }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case []int32:
-				less := func(a, b int32) bool { return a < b }
+				comparator := func(a, b int32) bool { return a > b }
 				equals := func(a, b int32) bool { return a == b }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case []int64:
-				less := func(a, b int64) bool { return a < b }
+				comparator := func(a, b int64) bool { return a > b }
 				equals := func(a, b int64) bool { return a == b }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case []float32:
-				less := func(a, b float32) bool { return a < b }
+				comparator := func(a, b float32) bool { return a > b }
 				equals := func(a, b float32) bool { return a == b }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case []float64:
-				less := func(a, b float64) bool { return a < b }
+				comparator := func(a, b float64) bool { return a > b }
 				equals := func(a, b float64) bool { return a == b }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case []string:
-				less := func(a, b string) bool { return a < b }
+				comparator := func(a, b string) bool { return a > b }
 				equals := func(a, b string) bool { return a == b }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]int:
-				less := func(a, b []int) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []int) bool { return custom_comparators.MoreSlice(a, b) }
 				equals := func(a, b []int) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]int32:
-				less := func(a, b []int32) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []int32) bool { return custom_comparators.MoreSlice(a, b) }
 				equals := func(a, b []int32) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]int64:
-				less := func(a, b []int64) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []int64) bool { return custom_comparators.MoreSlice(a, b) }
 				equals := func(a, b []int64) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]float32:
-				less := func(a, b []float32) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []float32) bool { return custom_comparators.MoreSlice(a, b) }
 				equals := func(a, b []float32) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]float64:
-				less := func(a, b []float64) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []float64) bool { return custom_comparators.MoreSlice(a, b) }
 				equals := func(a, b []float64) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]string:
-				less := func(a, b []string) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []string) bool { return custom_comparators.MoreSlice(a, b) }
 				equals := func(a, b []string) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			}
@@ -782,75 +782,75 @@ func TestMinHeapBuild(t *testing.T) {
 		t.Run(test.testName, func(t *testing.T) {
 			switch v := test.data.(type) {
 			case []int:
-				less := func(a, b int) bool { return a < b }
+				comparator := func(a, b int) bool { return a < b }
 				equals := func(a, b int) bool { return a == b }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case []int32:
-				less := func(a, b int32) bool { return a < b }
+				comparator := func(a, b int32) bool { return a < b }
 				equals := func(a, b int32) bool { return a == b }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case []int64:
-				less := func(a, b int64) bool { return a < b }
+				comparator := func(a, b int64) bool { return a < b }
 				equals := func(a, b int64) bool { return a == b }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case []float32:
-				less := func(a, b float32) bool { return a < b }
+				comparator := func(a, b float32) bool { return a < b }
 				equals := func(a, b float32) bool { return a == b }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case []float64:
-				less := func(a, b float64) bool { return a < b }
+				comparator := func(a, b float64) bool { return a < b }
 				equals := func(a, b float64) bool { return a == b }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case []string:
-				less := func(a, b string) bool { return a < b }
+				comparator := func(a, b string) bool { return a < b }
 				equals := func(a, b string) bool { return a == b }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]int:
-				less := func(a, b []int) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []int) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []int) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]int32:
-				less := func(a, b []int32) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []int32) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []int32) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]int64:
-				less := func(a, b []int64) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []int64) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []int64) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]float32:
-				less := func(a, b []float32) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []float32) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []float32) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]float64:
-				less := func(a, b []float64) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []float64) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []float64) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]string:
-				less := func(a, b []string) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []string) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []string) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				assert.Equal(t, test.expectedBuildFlag, h.IsHeap())
 				assert.Equal(t, test.expectedData, h.Data)
 			}
@@ -992,75 +992,75 @@ func TestMaxHeapPushing(t *testing.T) {
 		t.Run(test.testName, func(t *testing.T) {
 			switch v := test.originalData.(type) {
 			case []int:
-				less := func(a, b int) bool { return a < b }
+				comparator := func(a, b int) bool { return a > b }
 				equals := func(a, b int) bool { return a == b }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.(int))
 				assert.Equal(t, test.expectedData, h.Data)
 			case []int32:
-				less := func(a, b int32) bool { return a < b }
+				comparator := func(a, b int32) bool { return a > b }
 				equals := func(a, b int32) bool { return a == b }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.(int32))
 				assert.Equal(t, test.expectedData, h.Data)
 			case []int64:
-				less := func(a, b int64) bool { return a < b }
+				comparator := func(a, b int64) bool { return a > b }
 				equals := func(a, b int64) bool { return a == b }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.(int64))
 				assert.Equal(t, test.expectedData, h.Data)
 			case []float32:
-				less := func(a, b float32) bool { return a < b }
+				comparator := func(a, b float32) bool { return a > b }
 				equals := func(a, b float32) bool { return a == b }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.(float32))
 				assert.Equal(t, test.expectedData, h.Data)
 			case []float64:
-				less := func(a, b float64) bool { return a < b }
+				comparator := func(a, b float64) bool { return a > b }
 				equals := func(a, b float64) bool { return a == b }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.(float64))
 				assert.Equal(t, test.expectedData, h.Data)
 			case []string:
-				less := func(a, b string) bool { return a < b }
+				comparator := func(a, b string) bool { return a > b }
 				equals := func(a, b string) bool { return a == b }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.(string))
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]int:
-				less := func(a, b []int) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []int) bool { return custom_comparators.MoreSlice(a, b) }
 				equals := func(a, b []int) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.([]int))
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]int32:
-				less := func(a, b []int32) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []int32) bool { return custom_comparators.MoreSlice(a, b) }
 				equals := func(a, b []int32) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.([]int32))
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]int64:
-				less := func(a, b []int64) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []int64) bool { return custom_comparators.MoreSlice(a, b) }
 				equals := func(a, b []int64) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.([]int64))
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]float32:
-				less := func(a, b []float32) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []float32) bool { return custom_comparators.MoreSlice(a, b) }
 				equals := func(a, b []float32) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.([]float32))
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]float64:
-				less := func(a, b []float64) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []float64) bool { return custom_comparators.MoreSlice(a, b) }
 				equals := func(a, b []float64) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.([]float64))
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]string:
-				less := func(a, b []string) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []string) bool { return custom_comparators.MoreSlice(a, b) }
 				equals := func(a, b []string) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.([]string))
 				assert.Equal(t, test.expectedData, h.Data)
 			}
@@ -1202,75 +1202,75 @@ func TestMinHeapPushing(t *testing.T) {
 		t.Run(test.testName, func(t *testing.T) {
 			switch v := test.originalData.(type) {
 			case []int:
-				less := func(a, b int) bool { return a < b }
+				comparator := func(a, b int) bool { return a < b }
 				equals := func(a, b int) bool { return a == b }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.(int))
 				assert.Equal(t, test.expectedData, h.Data)
 			case []int32:
-				less := func(a, b int32) bool { return a < b }
+				comparator := func(a, b int32) bool { return a < b }
 				equals := func(a, b int32) bool { return a == b }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.(int32))
 				assert.Equal(t, test.expectedData, h.Data)
 			case []int64:
-				less := func(a, b int64) bool { return a < b }
+				comparator := func(a, b int64) bool { return a < b }
 				equals := func(a, b int64) bool { return a == b }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.(int64))
 				assert.Equal(t, test.expectedData, h.Data)
 			case []float32:
-				less := func(a, b float32) bool { return a < b }
+				comparator := func(a, b float32) bool { return a < b }
 				equals := func(a, b float32) bool { return a == b }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.(float32))
 				assert.Equal(t, test.expectedData, h.Data)
 			case []float64:
-				less := func(a, b float64) bool { return a < b }
+				comparator := func(a, b float64) bool { return a < b }
 				equals := func(a, b float64) bool { return a == b }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.(float64))
 				assert.Equal(t, test.expectedData, h.Data)
 			case []string:
-				less := func(a, b string) bool { return a < b }
+				comparator := func(a, b string) bool { return a < b }
 				equals := func(a, b string) bool { return a == b }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.(string))
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]int:
-				less := func(a, b []int) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []int) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []int) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.([]int))
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]int32:
-				less := func(a, b []int32) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []int32) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []int32) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.([]int32))
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]int64:
-				less := func(a, b []int64) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []int64) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []int64) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.([]int64))
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]float32:
-				less := func(a, b []float32) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []float32) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []float32) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.([]float32))
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]float64:
-				less := func(a, b []float64) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []float64) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []float64) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.([]float64))
 				assert.Equal(t, test.expectedData, h.Data)
 			case [][]string:
-				less := func(a, b []string) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []string) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []string) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				h.Push(test.pushingElement.([]string))
 				assert.Equal(t, test.expectedData, h.Data)
 			}
@@ -1370,9 +1370,9 @@ func TestMaxHeapPopping(t *testing.T) {
 		t.Run(test.testName, func(t *testing.T) {
 			switch v := test.data.(type) {
 			case []int:
-				less := func(a, b int) bool { return a < b }
+				comparator := func(a, b int) bool { return a > b }
 				equals := func(a, b int) bool { return a == b }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1380,9 +1380,9 @@ func TestMaxHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case []int32:
-				less := func(a, b int32) bool { return a < b }
+				comparator := func(a, b int32) bool { return a > b }
 				equals := func(a, b int32) bool { return a == b }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1390,9 +1390,9 @@ func TestMaxHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case []int64:
-				less := func(a, b int64) bool { return a < b }
+				comparator := func(a, b int64) bool { return a > b }
 				equals := func(a, b int64) bool { return a == b }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1400,9 +1400,9 @@ func TestMaxHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case []float32:
-				less := func(a, b float32) bool { return a < b }
+				comparator := func(a, b float32) bool { return a > b }
 				equals := func(a, b float32) bool { return a == b }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1410,9 +1410,9 @@ func TestMaxHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case []float64:
-				less := func(a, b float64) bool { return a < b }
+				comparator := func(a, b float64) bool { return a > b }
 				equals := func(a, b float64) bool { return a == b }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1420,9 +1420,9 @@ func TestMaxHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case []string:
-				less := func(a, b string) bool { return a < b }
+				comparator := func(a, b string) bool { return a > b }
 				equals := func(a, b string) bool { return a == b }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1430,9 +1430,9 @@ func TestMaxHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case [][]int:
-				less := func(a, b []int) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []int) bool { return custom_comparators.MoreSlice(a, b) }
 				equals := func(a, b []int) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1440,9 +1440,9 @@ func TestMaxHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case [][]int32:
-				less := func(a, b []int32) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []int32) bool { return custom_comparators.MoreSlice(a, b) }
 				equals := func(a, b []int32) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1450,9 +1450,9 @@ func TestMaxHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case [][]int64:
-				less := func(a, b []int64) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []int64) bool { return custom_comparators.MoreSlice(a, b) }
 				equals := func(a, b []int64) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1460,9 +1460,9 @@ func TestMaxHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case [][]float32:
-				less := func(a, b []float32) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []float32) bool { return custom_comparators.MoreSlice(a, b) }
 				equals := func(a, b []float32) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1470,9 +1470,9 @@ func TestMaxHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case [][]float64:
-				less := func(a, b []float64) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []float64) bool { return custom_comparators.MoreSlice(a, b) }
 				equals := func(a, b []float64) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1480,9 +1480,9 @@ func TestMaxHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case [][]string:
-				less := func(a, b []string) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []string) bool { return custom_comparators.MoreSlice(a, b) }
 				equals := func(a, b []string) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMaxHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1586,9 +1586,9 @@ func TestMinHeapPopping(t *testing.T) {
 		t.Run(test.testName, func(t *testing.T) {
 			switch v := test.data.(type) {
 			case []int:
-				less := func(a, b int) bool { return a < b }
+				comparator := func(a, b int) bool { return a < b }
 				equals := func(a, b int) bool { return a == b }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1596,9 +1596,9 @@ func TestMinHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case []int32:
-				less := func(a, b int32) bool { return a < b }
+				comparator := func(a, b int32) bool { return a < b }
 				equals := func(a, b int32) bool { return a == b }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1606,9 +1606,9 @@ func TestMinHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case []int64:
-				less := func(a, b int64) bool { return a < b }
+				comparator := func(a, b int64) bool { return a < b }
 				equals := func(a, b int64) bool { return a == b }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1616,9 +1616,9 @@ func TestMinHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case []float32:
-				less := func(a, b float32) bool { return a < b }
+				comparator := func(a, b float32) bool { return a < b }
 				equals := func(a, b float32) bool { return a == b }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1626,9 +1626,9 @@ func TestMinHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case []float64:
-				less := func(a, b float64) bool { return a < b }
+				comparator := func(a, b float64) bool { return a < b }
 				equals := func(a, b float64) bool { return a == b }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1636,9 +1636,9 @@ func TestMinHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case []string:
-				less := func(a, b string) bool { return a < b }
+				comparator := func(a, b string) bool { return a < b }
 				equals := func(a, b string) bool { return a == b }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1646,9 +1646,9 @@ func TestMinHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case [][]int:
-				less := func(a, b []int) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []int) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []int) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1656,9 +1656,9 @@ func TestMinHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case [][]int32:
-				less := func(a, b []int32) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []int32) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []int32) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1666,9 +1666,9 @@ func TestMinHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case [][]int64:
-				less := func(a, b []int64) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []int64) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []int64) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1676,9 +1676,9 @@ func TestMinHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case [][]float32:
-				less := func(a, b []float32) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []float32) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []float32) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1686,9 +1686,9 @@ func TestMinHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case [][]float64:
-				less := func(a, b []float64) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []float64) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []float64) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
@@ -1696,9 +1696,9 @@ func TestMinHeapPopping(t *testing.T) {
 					assert.Equal(t, test.expected, poppedElem)
 				}
 			case [][]string:
-				less := func(a, b []string) bool { return custom_comparators.LessSlice(a, b) }
+				comparator := func(a, b []string) bool { return custom_comparators.LessSlice(a, b) }
 				equals := func(a, b []string) bool { return custom_comparators.EqualsSlice(a, b) }
-				h := heap.NewMinHeap(v, less, equals)
+				h := heap.NewHeap(v, comparator, equals)
 				poppedElem, err := h.Pop()
 				if err != nil {
 					panic(err)
